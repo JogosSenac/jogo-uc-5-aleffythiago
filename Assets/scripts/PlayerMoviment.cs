@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -17,18 +16,20 @@ public class Player : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if(Input.GetMouseButtonDown(0))
         jump = true;
     }
-    private void FixedUpdate()
+        private void FixedUpdate()
     {
         if (jump)
         {
             rb.velocity = Vector2.up * jumpForce;
             jump = false;
         }
-        transform.rotation = Quaternion.Euler(0, 0, rb.velocity.y * rotationMultiplier);
+        transform.rotation = Quaternion.Euler(0,0, Mathf.Clamp((rb.velocity.y + 2) * rotationMultiplier, -85, 20));
     }
 }
+
+
