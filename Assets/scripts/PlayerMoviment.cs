@@ -9,17 +9,22 @@ public class Player : MonoBehaviour
 
     public GameManeger gm;
     public Rigidbody2D rb;
+    
     private bool jump;
-    void Start()
-    {
-       
-    }
 
     // Update is called once per frame
     private void Update()
     {
+        if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+
+        }
+    #if UNITY_EDITOR   
+        
         if(Input.GetMouseButtonDown(0))
         jump = true;
+    #endif
+    
     }
         private void FixedUpdate()
     {
