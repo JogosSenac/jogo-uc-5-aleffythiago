@@ -1,4 +1,7 @@
+
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
@@ -6,35 +9,81 @@ public class Player : MonoBehaviour
     public float rotationMultiplier;
     public Animator animator;
     public int score;
-
-    public GameManeger gm;
+    public bool startGame = false;
+    public UIscript gm;
     public Rigidbody2D rb;
     
     private bool jump;
 
+    void Start()
+    {
+        rb.Sleep();
+        gm = GameObject.Find("UI").GetComponent<UIscript>();
+    }
     // Update is called once per frame
     private void Update()
     {
-        if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        if(Input.GetMouseButton(0))
         {
-
+            startGame = true;
         }
-    #if UNITY_EDITOR   
-        
-        if(Input.GetMouseButtonDown(0))
-        jump = true;
-    #endif
-    
+
+        if(GameStart())
+        {
+            rb.WakeUp();
+        }
+
+        if(Input.GetMouseButton(0) && GameStart())
+        {
+            jump = true;
+        }
     }
-        private void FixedUpdate()
+    void FixedUpdate()
     {
-        if (jump)
+        FlyMode();
+    }
+    private void OnCollisionEnter2D(Collision collision)
+    {
+        if(!collision.collider.name.Equals("Parede"))
+        {
+            if(collision.collider.tag.Equals("Obstaculo"))
+            foreach(BoxCollider2D col in collision.collider.transform.parent.GetComponentsInChildren<BoxCollider2D>())
+            col.enabled = false;
+            animator.enabled = false;
+        }
+        if(collision.gameObject.CompareTag("Chao"))
+        {
+            Destroy(rb);
+            gm.GameOverPanel();
+        }
+        if(collision.gameObject.CompareTag("Cano"))
+        {
+            Destroy(rb);
+            gm.GameOverPanel();
+        }
+        
+    }
+
+
+    void FlyMode()
+    {
+        if(jump)
         {
             rb.velocity = Vector2.up * jumpForce;
             jump = false;
         }
-        transform.rotation = Quaternion.Euler(0,0, Mathf.Clamp((rb.velocity.y + 2) * rotationMultiplier, -85, 20));
+        if(rb.velocity.sqrMagnitude>0)
+        {
+            transform.rotation = Quaternion.Euler(0,0, Mathf.Clamp((rb.velocity.y + 2) * rotationMultiplier, -85, 20));
+        }
+        
     }
+    private bool GameStart()
+    {
+        return startGame;
+    }
+
+    
 }
 
 
