@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     public Rigidbody2D rb;
     
     private bool jump;
+    
 
     void Start()
     {
@@ -42,7 +43,7 @@ public class Player : MonoBehaviour
     {
         FlyMode();
     }
-    private void OnCollisionEnter2D(Collision collision)
+    private void PlayerOnCollisionEnter2D(Collision collision)
     {
         if(!collision.collider.name.Equals("Parede"))
         {

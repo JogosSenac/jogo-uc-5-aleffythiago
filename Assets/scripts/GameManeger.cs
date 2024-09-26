@@ -24,12 +24,9 @@ public class GameManeger : MonoBehaviour
     
     public void GameOver()
     {
-        gameOverPanel.SetActive(true);
-        gamePlaying = false;
-        bgspeed = 0;
-        ObstaculosSpeed = 0;
-
+       
     }
+    
 
 }
 
